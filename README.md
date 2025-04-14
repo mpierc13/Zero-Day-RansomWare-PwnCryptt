@@ -43,19 +43,22 @@ DeviceProcessEvents
 
 ```kql
 DeviceProcessEvents
+| where DeviceName == "marcels-vm"
 | where ProcessCommandLine has "Invoke-WebRequest" and ProcessCommandLine has "pwncrypt.ps1"
 | project Timestamp, DeviceName, InitiatingProcessParentFileName, ProcessCommandLine, AccountName
 ```
-![Screenshot 2025-01-09 112931](https://github.com/user-attachments/assets/726cfa16-8617-410e-9805-c316b01a0606)
+![image](https://github.com/user-attachments/assets/2e06b655-090f-4a71-bd0b-56dd7eb47a29)
 
 
 #### **Trace Ransomware Execution:**  
 ```kql
 DeviceProcessEvents
+| where DeviceName == "marcels-vm"
 | where ProcessCommandLine has "C:\\programdata\\pwncrypt.ps1" or FileName == "powershell.exe"
 | project Timestamp, DeviceName, InitiatingProcessFileName, ProcessCommandLine, AccountName, InitiatingProcessAccountName
 ```
-![Screenshot 2025-01-09 112245](https://github.com/user-attachments/assets/d657757a-28a1-491e-a246-d94b0f720ea0)
+![image](https://github.com/user-attachments/assets/531ce4ca-5db8-477e-b3ad-ee7471fe17df)
+
 
 #### **Outbound Network Activity:**  
 ```kql
